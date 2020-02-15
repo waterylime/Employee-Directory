@@ -2,7 +2,9 @@ import React from "react"
 import "./search.css";
 
 
-const Form = ()=> {
+
+function Form ({handleClick}) {
+
     return (
     <>
       <h2>Search Employees</h2>  
@@ -11,7 +13,8 @@ const Form = ()=> {
             
             <input type="text" className="form-control" id="inputFiels" placeholder="John Doe"/>
             <div className="input-group-append">
-                <button className="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                <button className="btn btn-outline-secondary" type="button" id="button-addon2" 
+                onClick={(event)=>{let searchedFor = event.target.parentNode.previousElementSibling.value; handleClick(searchedFor) }  }>Button</button>
             </div>
             
         </div>

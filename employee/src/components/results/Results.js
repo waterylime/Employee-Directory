@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./results.css";
-import API from "../../utils/API";
+
+import UsersContext from "../../utils/UsersContext";
 
 const Results = () => {
-  const [users, setUsers] = useState([]);
+  
+  const test = useContext(UsersContext);
 
-  useEffect(() => {
-    API.search().then(res => {
-      setUsers(res.data.results);
-    });
-    return () => {
-      console.log("cleaning up");
-    };
-  }, []);
 
   return (
     <div>
@@ -28,24 +22,49 @@ const Results = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((item, index) => (
-            <>
-              <tr>
-                <td>{index + 1}</td>
-                <td>{item.name.first + " " + item.name.last}</td>
-                <td>{item.email}</td>
-                <td>{item.gender}</td>
-                <td>{item.phone}</td>
-                <td>
-                  <img src={item.picture.thumbnail}></img>
-                </td>
-              </tr>
-            </>
-          ))}
+          {test.searchTerm === ""
+            ? test.users.map((item, index) => (
+                <>
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{item.name.first + " " + item.name.last}</td>
+                    <td>{item.email}</td>
+                    <td>{item.gender}</td>
+                    <td>{item.phone}</td>
+                    <td>
+                      <img src={item.picture.thumbnail} alt=""></img>
+                    </td>
+                  </tr>
+                </>
+              ))
+            : test.users.filter((item, index) => {
+              //console.log(test.users)
+                if (
+                  test.searchTerm === item.name.first ||
+                  test.searchTerm === item.name.last ||
+                  test.searchTerm === item.name.first + " " + item.name.last
+                ) {
+                  
+                  return true;
+                }
+                return false
+              }).map((item, index) => (
+                <>
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{item.name.first + " " + item.name.last}</td>
+                    <td>{item.email}</td>
+                    <td>{item.gender}</td>
+                    <td>{item.phone}</td>
+                    <td>
+                      <img src={item.picture.thumbnail} alt=""></img>
+                    </td>
+                  </tr>
+                </>
+              ))}
         </tbody>
       </table>
     </div>
   );
 };
-
 export default Results;
